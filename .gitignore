@@ -1,0 +1,30 @@
+# Mac
+.DS_Store
+
+# node_modules
+node_modules
+report
+coverage
+build
+tmp
+
+# Log files
+logs
+*.log
+
+#bower_components
+bower_components
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+e2e-tests
+components
+index-async.html
+karma.conf.js
+.bowerrc
+.jshintrc
+.travis.yml
+
