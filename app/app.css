@@ -28,3 +28,23 @@
   content: "";
   padding: 0;
 }
+
+div.stbody {
+  min-height: 70px;
+  margin-bottom: 10px;
+  border-bottom: dashed 1px #ccc;
+}
+
+div.stimg {
+  float: left;
+  height: 50px;
+  width: 50px;
+  border: solid 1px #dedede;
+}
+div.sttext {
+  display: block;
+  margin-left: 70px;
+  min-height: 50px;
+  word-wrap: break-word;
+  overflow: hidden;
+}

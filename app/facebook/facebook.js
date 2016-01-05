@@ -41,8 +41,7 @@ angular.module('ngSocial.facebook', ['ngRoute','ngFacebook'])
   };
 
   function refresh(){
-    
-    $facebook.api("/me",{fields: 'last_name, first_name, email, locale'}).then(
+    $facebook.api("/me",{fields: 'name, last_name, first_name, email, locale'}).then(
       
                 function(response) {
                   $scope.welcomeMsg = "Welcome " + response.name;
@@ -53,20 +52,11 @@ angular.module('ngSocial.facebook', ['ngRoute','ngFacebook'])
                     $scope.picture = response.data.url;
                     
                     $facebook.api('/me/permissions').then(function(response){
-                      // $scope.permissions = response.data;
-                      
-
-
+                      $scope.permissions = response.data;
                       $scope.permissionsx = response.data;
-
-                      
-
-
-
 
                       $facebook.api('/me/posts').then(function(response){
                         $scope.posts = response.data;
-                      $scope.permissions = response.data;                       
                       });
                     });
                   });
@@ -76,5 +66,13 @@ angular.module('ngSocial.facebook', ['ngRoute','ngFacebook'])
                   $scope.welcomeMsg = "Please Log In";
                 });
   }
+
+  $scope.postStatus = function(){
+    var body = this.body;
+    $facebook.api('/me/feed', 'post', {message: body}).then(function(response){
+      $scope.msg = "Thanks for Posting";
+      refresh();
+    });
+  };
   refresh();
 }]);
