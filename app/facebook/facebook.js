@@ -11,7 +11,7 @@ angular.module('ngSocial.facebook', ['ngRoute','ngFacebook'])
 
 .config( function( $facebookProvider ) {
   $facebookProvider.setAppId('');
-  $facebookProvider.setPermissions("email", "public_profile", "user_posts", "publish_actions", "user_photos");
+  $facebookProvider.setPermissions("email, public_profile, user_posts, publish_actions, user_photos");
 })
 
 .run( function( $rootScope ) {
@@ -27,8 +27,54 @@ angular.module('ngSocial.facebook', ['ngRoute','ngFacebook'])
 .controller('FacebookCtrl', ['$scope','$facebook', function($scope, $facebook) {
   $scope.isLoggedIn = false;
   $scope.login = function(){
-    $facebook.login().then(function(){
-      console.log('Logged In');
+    $facebook.login().then(function(response){
+      // $scope.isLoggedIn = true ? response.authResponse !== null : false ;
+      refresh();
     });
+  };
+
+  $scope.logout = function(){
+    $facebook.logout().then(function(){
+      $scope.isLoggedIn = false;
+      refresh();
+    });
+  };
+
+  function refresh(){
+    
+    $facebook.api("/me",{fields: 'last_name, first_name, email, locale'}).then(
+      
+                function(response) {
+                  $scope.welcomeMsg = "Welcome " + response.name;
+                  $scope.isLoggedIn = true;
+                  $scope.userInfo = response;
+           
+                  $facebook.api('/me/picture').then(function(response){
+                    $scope.picture = response.data.url;
+                    
+                    $facebook.api('/me/permissions').then(function(response){
+                      // $scope.permissions = response.data;
+                      
+
+
+                      $scope.permissionsx = response.data;
+
+                      
+
+
+
+
+                      $facebook.api('/me/posts').then(function(response){
+                        $scope.posts = response.data;
+                      $scope.permissions = response.data;                       
+                      });
+                    });
+                  });
+
+                },
+                function (err) {
+                  $scope.welcomeMsg = "Please Log In";
+                });
   }
+  refresh();
 }]);
